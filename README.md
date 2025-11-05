@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# URL Shortener x402 🔗
 
-## Getting Started
+A decentralized URL shortener that uses the x402 payment protocol for micropayments and stores URLs on the Ethereum blockchain.
 
-First, run the development server:
+## Features ✨
+
+- **Decentralized Storage**: URLs stored permanently on Ethereum Sepolia
+- **x402 Payments**: Micropayments handled via x402 protocol on Base Sepolia
+- **Custom URLs**: Create custom short codes (premium feature)
+- **Analytics**: Track click counts for your shortened URLs
+- **Wallet Integration**: Connect with MetaMask or any EVM wallet
+
+## Tech Stack 🛠
+
+- **Frontend**: Next.js 14, TypeScript, TailwindCSS
+- **Blockchain**: Solidity smart contracts on Ethereum Sepolia
+- **Payments**: x402 protocol on Base Sepolia
+- **Wallet**: RainbowKit, wagmi, viem
+
+## Quick Start 🚀
+
+### 1. Install Dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Deploy Smart Contract
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Deploy `contracts/URLStorage_x402.sol` to Ethereum Sepolia using Remix IDE.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Configure Environment
 
-## Learn More
+Create `.env.local` file:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+NEXT_PUBLIC_CONTRACT_ADDRESS=<your_deployed_contract>
+NEXT_PUBLIC_SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
+SERVER_PRIVATE_KEY=<authorized_server_wallet_key>
+X402_PAYMENT_ADDRESS=<your_payment_receiver_address>
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Run Development Server
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
+Open [http://localhost:3000](http://localhost:3000) to see the application.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Pricing 💰
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Standard URL**: $0.001 (paid in USDC on Base Sepolia)
+- **Custom URL**: $0.002 (2x standard price)
+- **Analytics**: $0.0001 per query
+
+## How It Works 🔄
+
+1. User connects their wallet
+2. User enters a URL to shorten
+3. x402 middleware handles payment (HTTP 402)
+4. User approves micropayment in their wallet
+5. URL is stored on-chain
+6. User receives shortened URL
+
+## Networks 🌐
+
+- **Payments**: Base Sepolia (Chain ID: 84532)
+- **Storage**: Ethereum Sepolia (Chain ID: 11155111)
+- **Facilitator**: https://x402.org/facilitator
+
+## Project Structure 📁
+
+```
+url_x402/
+├── contracts/           # Solidity smart contracts
+├── src/
+│   ├── app/            # Next.js app router
+│   ├── components/     # React components
+│   ├── hooks/          # Custom React hooks
+│   ├── lib/            # Utilities and configs
+│   └── middleware.ts   # x402 payment middleware
+├── public/             # Static assets
+└── DEPLOYMENT_COMPLETE.md  # Detailed deployment guide
+```
+
+## Documentation 📚
+
+- [Full Deployment Guide](./DEPLOYMENT_COMPLETE.md)
+- [x402 Protocol Documentation](https://x402.org)
+- [x402 GitHub](https://github.com/coinbase/x402)
+
+## License 📄
+
+MIT
