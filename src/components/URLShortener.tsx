@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAccount } from 'wagmi';
-import { Link2, Copy, ExternalLink, Loader2, Shield, BarChart3 } from 'lucide-react';
+import { Link2, Copy, ExternalLink, Loader2, Shield} from 'lucide-react';
 import { toast } from 'sonner';
 import { useX402Payment } from '@/hooks/useX402Payment';
 import { isValidUrl, copyToClipboard } from '@/lib/utils';
@@ -61,7 +61,7 @@ export default function URLShortener() {
     <div className="w-full max-w-4xl mx-auto">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+        <h1 className="text-4xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
           URL Shortener with x402
         </h1>
         <p className="text-gray-600 dark:text-gray-400 text-lg">

@@ -135,7 +135,7 @@ export default function URLLookup() {
     <div className="w-full max-w-4xl mx-auto">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+        <h1 className="text-4xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
           URL Lookup
         </h1>
         <p className="text-gray-600 dark:text-gray-400 text-lg">
@@ -177,7 +177,7 @@ export default function URLLookup() {
             <button
               type="submit"
               disabled={isSearching}
-              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 whitespace-nowrap shadow-lg"
+              className="px-8 py-4 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 whitespace-nowrap shadow-lg"
             >
               {isSearching ? (
                 <>
@@ -218,7 +218,7 @@ export default function URLLookup() {
                   </div>
                   <button
                     onClick={() => openUrl(urlRecord.originalUrl)}
-                    className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors flex-shrink-0"
+                    className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors shrink-0"
                     title="Open URL"
                   >
                     <ExternalLink className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -259,7 +259,7 @@ export default function URLLookup() {
               {/* Action Button */}
               <button
                 onClick={() => openUrl(urlRecord.originalUrl)}
-                className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200 transition-all flex items-center justify-center gap-2 shadow-lg"
+                className="w-full py-4 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-200 transition-all flex items-center justify-center gap-2 shadow-lg"
               >
                 <ExternalLink className="w-5 h-5" />
                 Visit Original URL
@@ -284,7 +284,7 @@ export default function URLLookup() {
       )}
 
       {/* Info Box */}
-      <div className="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+      <div className="mt-8 bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
         <p className="text-sm text-blue-900 dark:text-blue-100">
           <span className="font-semibold">💡 Tip:</span> This lookup is completely free! 
           We are reading directly from the blockchain without requiring any payment.
