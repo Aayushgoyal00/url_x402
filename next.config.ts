@@ -54,6 +54,10 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react', '@rainbow-me/rainbowkit'],
   },
   
+  // Acknowledge Turbopack usage (Next.js 16 default)
+  // Webpack config above is kept for fallback compatibility
+  turbopack: {},
+  
   // Ensure proper CSS handling
   sassOptions: undefined,
 };
