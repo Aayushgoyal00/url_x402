@@ -26,15 +26,6 @@ export const middleware = paymentMiddleware(
         }
       }
     },
-    '/api/shorten/custom': {
-      price: '$0.002', // Double price for custom URLs
-      network: 'base-sepolia',
-      config: {
-        description: 'Create a custom shortened URL',
-        maxTimeoutSeconds: 120,
-        mimeType: 'application/json',
-      }
-    },
     '/api/analytics/[shortCode]': {
       price: '$0.0001', // Small fee for analytics
       network: 'base-sepolia',

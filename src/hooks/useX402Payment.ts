@@ -146,11 +146,10 @@ export function useX402Payment() {
   }, [isConnected, address, chain?.id, switchChainAsync]);
 
   const shortenUrl = useCallback(async (
-    url: string,
-    customCode?: string
+    url: string
   ) => {
-    const endpoint = customCode ? '/api/shorten/custom' : '/api/shorten';
-    const data = customCode ? { url, customCode } : { url };
+    const endpoint = '/api/shorten';
+    const data = { url };
     
     return makePaymentRequest(endpoint, 'POST', data, {
       onSuccess: () => {

@@ -6,12 +6,11 @@ import { useAccount } from 'wagmi';
 import { Link2, Copy, ExternalLink, Loader2, Shield, BarChart3 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useX402Payment } from '@/hooks/useX402Payment';
-import { isValidUrl, isValidShortCode, copyToClipboard } from '@/lib/utils';
+import { isValidUrl, copyToClipboard } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 
 interface FormData {
   url: string;
-  customCode?: string;
 }
 
 interface ShortenUrlResponse {
@@ -25,7 +24,6 @@ interface ShortenUrlResponse {
 export default function URLShortener() {
   const [shortenedUrl, setShortenedUrl] = useState<string>('');
   const [shortCode, setShortCode] = useState<string>('');
-  const [isCustomMode, setIsCustomMode] = useState(false);
   const [copied, setCopied] = useState(false);
   
   const { isConnected } = useAccount();
@@ -40,7 +38,7 @@ export default function URLShortener() {
     }
 
     try {
-      const result = await shortenUrl(data.url, data.customCode) as ShortenUrlResponse;
+      const result = await shortenUrl(data.url) as ShortenUrlResponse;
       if (result.success) {
         setShortenedUrl(result.shortUrl);
         setShortCode(result.shortCode);
@@ -127,50 +125,6 @@ export default function URLShortener() {
             )}
           </div>
 
-          {/* Custom Code Toggle */}
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="customMode"
-              checked={isCustomMode}
-              onChange={(e) => setIsCustomMode(e.target.checked)}
-              className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-            />
-            <label htmlFor="customMode" className="text-sm text-gray-700 dark:text-gray-300">
-              Use custom short code (2x price: $0.002)
-            </label>
-          </div>
-
-          {/* Custom Code Input */}
-          {isCustomMode && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Custom short code
-              </label>
-              <input
-                {...register('customCode', {
-                  validate: (value) => {
-                    if (!isCustomMode) return true;
-                    if (!value) return 'Custom code is required when enabled';
-                    return isValidShortCode(value) || 'Must be 3-20 alphanumeric characters';
-                  }
-                })}
-                type="text"
-                placeholder="my-custom-link"
-                className={cn(
-                  "w-full px-4 py-3 rounded-lg border transition-colors",
-                  "bg-white dark:bg-gray-900 text-gray-900 dark:text-white",
-                  "border-gray-300 dark:border-gray-600",
-                  "focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-                  "placeholder-gray-400 dark:placeholder-gray-500",
-                  errors.customCode && "border-red-500"
-                )}
-              />
-              {errors.customCode && (
-                <p className="mt-1 text-sm text-red-600">{errors.customCode.message}</p>
-              )}
-            </div>
-          )}
 
           {/* Submit Button */}
           <button
@@ -195,7 +149,7 @@ export default function URLShortener() {
                 <Link2 className="w-5 h-5" />
                 <span>
                   {isConnected 
-                    ? `Shorten URL (${isCustomMode ? '$0.002' : '$0.001'})`
+                    ? 'Shorten URL ($0.001)'
                     : 'Connect Wallet to Continue'
                   }
                 </span>
@@ -252,13 +206,13 @@ export default function URLShortener() {
 
           <div className="mt-4 flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
             <span>Short code: <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">{shortCode}</code></span>
-            <a
+            {/* <a
               href={`/analytics/${shortCode}`}
               className="text-blue-600 dark:text-blue-400 hover:underline flex items-center space-x-1"
             >
               <BarChart3 className="w-4 h-4" />
               <span>View Analytics</span>
-            </a>
+            </a> */}
           </div>
         </div>
       )}

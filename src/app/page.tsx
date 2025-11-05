@@ -1,10 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import URLShortener from '@/components/URLShortener';
-import { Github, Globe } from 'lucide-react';
+import URLLookup from '@/components/URLLookup';
+import { Github, Globe, Link2, Search } from 'lucide-react';
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState<'shorten' | 'lookup'>('shorten');
+
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Navigation */}
@@ -35,7 +39,36 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <URLShortener />
+        {/* Tabs */}
+        <div className="flex justify-center mb-8">
+          <div className="inline-flex bg-white rounded-lg shadow-md p-1">
+            <button
+              onClick={() => setActiveTab('shorten')}
+              className={`flex items-center gap-2 px-6 py-3 rounded-md font-medium transition-all ${
+                activeTab === 'shorten'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              <Link2 className="w-5 h-5" />
+              Shorten URL
+            </button>
+            <button
+              onClick={() => setActiveTab('lookup')}
+              className={`flex items-center gap-2 px-6 py-3 rounded-md font-medium transition-all ${
+                activeTab === 'lookup'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              <Search className="w-5 h-5" />
+              Lookup URL
+            </button>
+          </div>
+        </div>
+
+        {/* Content */}
+        {activeTab === 'shorten' ? <URLShortener /> : <URLLookup />}
 
         {/* Info Section */}
         {/* <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">

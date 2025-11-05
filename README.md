@@ -1,95 +1,110 @@
-# URL Shortener x402 🔗
+# URLx402 - Blockchain URL Shortener
 
-A decentralized URL shortener that uses the x402 payment protocol for micropayments and stores URLs on the Ethereum blockchain.
+A decentralized URL shortener powered by x402 micropayments and blockchain storage on Base Sepolia.
 
-## Features ✨
+## ✨ Features
 
-- **Decentralized Storage**: URLs stored permanently on Ethereum Sepolia
-- **x402 Payments**: Micropayments handled via x402 protocol on Base Sepolia
-- **Custom URLs**: Create custom short codes (premium feature)
-- **Analytics**: Track click counts for your shortened URLs
-- **Wallet Integration**: Connect with MetaMask or any EVM wallet
+- 🔗 **URL Shortening** - Pay $0.001 USDC to create shortened URLs
+- 🔍 **URL Lookup** - Free blockchain-based URL retrieval
+- 💳 **x402 Payments** - Seamless crypto micropayments via MetaMask
+- ⛓️ **On-Chain Storage** - Permanent URLs stored on Base Sepolia
 
-## Tech Stack 🛠
+## 🚀 Quick Start
 
-- **Frontend**: Next.js 14, TypeScript, TailwindCSS
-- **Blockchain**: Solidity smart contracts on Ethereum Sepolia
-- **Payments**: x402 protocol on Base Sepolia
-- **Wallet**: RainbowKit, wagmi, viem
+### Prerequisites
 
-## Quick Start 🚀
+- Node.js 18+ and pnpm
+- MetaMask with Base Sepolia network
+- Base Sepolia USDC for payments
+- Base Sepolia ETH for gas fees
 
-### 1. Install Dependencies
+### Installation
 
 ```bash
+# Install dependencies
 pnpm install
+
+# Copy environment template
+cp env.template .env.local
 ```
 
-### 2. Deploy Smart Contract
+### Configuration
 
-Deploy `contracts/URLStorage_x402.sol` to Ethereum Sepolia using Remix IDE.
-
-### 3. Configure Environment
-
-Create `.env.local` file:
+Edit `.env.local`:
 
 ```env
-NEXT_PUBLIC_CONTRACT_ADDRESS=<your_deployed_contract>
-NEXT_PUBLIC_SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
-SERVER_PRIVATE_KEY=<authorized_server_wallet_key>
-X402_PAYMENT_ADDRESS=<your_payment_receiver_address>
+# Your deployed contract address on Base Sepolia
+NEXT_PUBLIC_CONTRACT_ADDRESS=0xYourContractAddress
+
+# Base Sepolia RPC URL
+NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
+
+# Server wallet private key (for contract interaction)
+SERVER_PRIVATE_KEY=0xYourPrivateKey
+
+# Payment receiver address (must be NEXT_PUBLIC_ for middleware)
+NEXT_PUBLIC_X402_PAYMENT_ADDRESS=0xYourPaymentAddress
+
+# App configuration
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_CHAIN_ID=84532
 ```
 
-### 4. Run Development Server
+### Deploy Smart Contract
+
+1. Open [Remix IDE](https://remix.ethereum.org)
+2. Upload `contracts/URLStorage_x402.sol`
+3. Compile with Solidity 0.8.24
+4. Deploy to **Base Sepolia** testnet
+5. Authorize your server wallet:
+   ```solidity
+   setServerAuthorization(yourServerAddress, true)
+   ```
+
+### Run Development Server
 
 ```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see the application.
+Open [http://localhost:3000](http://localhost:3000)
 
-## Pricing 💰
+## 🎯 How It Works
 
-- **Standard URL**: $0.001 (paid in USDC on Base Sepolia)
-- **Custom URL**: $0.002 (2x standard price)
-- **Analytics**: $0.0001 per query
+### Shorten URL (Paid)
+1. Connect your MetaMask wallet
+2. Enter a URL to shorten
+3. Approve $0.001 USDC payment
+4. Get your shortened URL instantly
 
-## How It Works 🔄
+### Lookup URL (Free)
+1. Enter any short code
+2. Retrieve original URL from blockchain
+3. View creator and creation date
 
-1. User connects their wallet
-2. User enters a URL to shorten
-3. x402 middleware handles payment (HTTP 402)
-4. User approves micropayment in their wallet
-5. URL is stored on-chain
-6. User receives shortened URL
+## 💰 Pricing
 
-## Networks 🌐
+| Feature | Cost | Network |
+|---------|------|---------|
+| Standard URL | $0.001 USDC | Base Sepolia |
+| URL Lookup | Free | Base Sepolia |
 
-- **Payments**: Base Sepolia (Chain ID: 84532)
-- **Storage**: Ethereum Sepolia (Chain ID: 11155111)
-- **Facilitator**: https://x402.org/facilitator
 
-## Project Structure 📁
 
-```
-url_x402/
-├── contracts/           # Solidity smart contracts
-├── src/
-│   ├── app/            # Next.js app router
-│   ├── components/     # React components
-│   ├── hooks/          # Custom React hooks
-│   ├── lib/            # Utilities and configs
-│   └── middleware.ts   # x402 payment middleware
-├── public/             # Static assets
-└── DEPLOYMENT_COMPLETE.md  # Detailed deployment guide
-```
+## 📚 Resources
 
-## Documentation 📚
-
-- [Full Deployment Guide](./DEPLOYMENT_COMPLETE.md)
-- [x402 Protocol Documentation](https://x402.org)
+- [x402 Documentation](https://x402.org)
+- [Base Sepolia Explorer](https://sepolia.basescan.org)
 - [x402 GitHub](https://github.com/coinbase/x402)
 
-## License 📄
+## 🤝 Contributing
 
-MIT
+Contributions are welcome! This is a testnet project demonstrating x402 micropayment capabilities.
+
+## 🙏 Acknowledgments
+
+Built with [x402 Protocol](https://x402.org) by Coinbase for seamless HTTP 402 payments.
+
+---
+
+**Note**: This is a testnet application. All transactions use test tokens with no real value.
