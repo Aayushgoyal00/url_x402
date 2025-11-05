@@ -54,11 +54,43 @@ export async function POST(request: NextRequest) {
     }
 
     // Get payment information from headers (x402 adds this after payment)
-    const payerAddress = request.headers.get('x-payer-address') || '0x0000000000000000000000000000000000000000';
+    const paymentHeader = request.headers.get('x-payment');
+    const paymentResponseHeader = request.headers.get('x-payment-response');
+    
+    console.log('Custom URL - Payment headers:', {
+      hasPayment: !!paymentHeader,
+      hasPaymentResponse: !!paymentResponseHeader
+    });
 
-    // Connect to smart contract
+    // Extract payer address from x-payment-response header
+    let payerAddress = '0x0000000000000000000000000000000000000000';
+    
+    if (paymentResponseHeader) {
+      try {
+        const paymentResponse = JSON.parse(atob(paymentResponseHeader));
+        console.log('Custom URL - Payment response:', paymentResponse);
+        payerAddress = paymentResponse.payer || '0x0000000000000000000000000000000000000000';
+        console.log('Custom URL - Extracted payer address:', payerAddress);
+      } catch (error) {
+        console.error('Custom URL - Failed to parse payment response:', error);
+      }
+    }
+
+    // Validate that payment was processed
+    if (!payerAddress || payerAddress === '0x0000000000000000000000000000000000000000') {
+      console.error('No valid payer address - payment may not have been processed');
+      return NextResponse.json(
+        { 
+          error: 'Payment verification failed',
+          details: 'No payer address found. Please ensure payment was completed.'
+        },
+        { status: 402 }
+      );
+    }
+
+    // Connect to smart contract on Base Sepolia
     const provider = new ethers.JsonRpcProvider(
-      process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com'
+      process.env.NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL || 'https://sepolia.base.org'
     );
 
     const serverWallet = new ethers.Wallet(
@@ -85,7 +117,7 @@ export async function POST(request: NextRequest) {
     try {
       const tx = await contract.createShortUrl(url, payerAddress, customCode);
       await tx.wait();
-    } catch (error: any) {
+    } catch (error) {
       console.error('Contract error:', error);
       return NextResponse.json(
         { error: 'Failed to store URL on blockchain' },
@@ -112,7 +144,7 @@ export async function POST(request: NextRequest) {
       }
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error in custom URL creation:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

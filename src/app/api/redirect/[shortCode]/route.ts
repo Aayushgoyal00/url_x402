@@ -21,9 +21,9 @@ export async function GET(
       );
     }
 
-    // Connect to smart contract (read-only, no wallet needed)
+    // Connect to smart contract on Base Sepolia (read-only, no wallet needed)
     const provider = new ethers.JsonRpcProvider(
-      process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com'
+      process.env.NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL || 'https://sepolia.base.org'
     );
 
     const contract = new ethers.Contract(
@@ -52,10 +52,10 @@ export async function GET(
         shortCode
       });
 
-    } catch (contractError: any) {
+    } catch (contractError) {
       console.error('Contract error:', contractError);
       
-      if (contractError.message?.includes('URL not found')) {
+      if (contractError instanceof Error && contractError.message?.includes('URL not found')) {
         return NextResponse.json(
           { error: 'Short URL does not exist' },
           { status: 404 }
@@ -68,7 +68,7 @@ export async function GET(
       );
     }
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error in redirect:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

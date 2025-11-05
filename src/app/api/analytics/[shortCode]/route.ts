@@ -23,9 +23,9 @@ export async function GET(
     // Note: Payment has been verified by x402 middleware before reaching here
     const payerAddress = request.headers.get('x-payer-address');
 
-    // Connect to smart contract
+    // Connect to smart contract on Base Sepolia
     const provider = new ethers.JsonRpcProvider(
-      process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com'
+      process.env.NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL || 'https://sepolia.base.org'
     );
 
     const contract = new ethers.Contract(
@@ -73,10 +73,10 @@ export async function GET(
         }
       });
 
-    } catch (contractError: any) {
+    } catch (contractError) {
       console.error('Contract error:', contractError);
       
-      if (contractError.message?.includes('URL not found')) {
+      if (contractError instanceof Error && contractError.message?.includes('URL not found')) {
         return NextResponse.json(
           { error: 'Analytics not available for this URL' },
           { status: 404 }
@@ -89,7 +89,7 @@ export async function GET(
       );
     }
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error in analytics:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
       }
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error in user analytics:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

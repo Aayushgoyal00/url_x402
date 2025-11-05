@@ -14,6 +14,14 @@ interface FormData {
   customCode?: string;
 }
 
+interface ShortenUrlResponse {
+  success: boolean;
+  shortUrl: string;
+  shortCode: string;
+  originalUrl: string;
+  message?: string;
+}
+
 export default function URLShortener() {
   const [shortenedUrl, setShortenedUrl] = useState<string>('');
   const [shortCode, setShortCode] = useState<string>('');
@@ -32,7 +40,7 @@ export default function URLShortener() {
     }
 
     try {
-      const result = await shortenUrl(data.url, data.customCode);
+      const result = await shortenUrl(data.url, data.customCode) as ShortenUrlResponse;
       if (result.success) {
         setShortenedUrl(result.shortUrl);
         setShortCode(result.shortCode);

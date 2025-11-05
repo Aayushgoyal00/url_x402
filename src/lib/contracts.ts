@@ -1,7 +1,7 @@
 // Contract configuration and ABIs
 
 export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '';
-export const SEPOLIA_RPC_URL = process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com';
+export const BASE_SEPOLIA_RPC_URL = process.env.NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL || 'https://sepolia.base.org';
 
 // URLStorage contract ABI (minimalist version for x402 integration)
 export const URL_STORAGE_ABI = [
@@ -32,21 +32,10 @@ export const URL_STORAGE_ABI = [
 
 // Network configuration
 export const NETWORK_CONFIG = {
-  sepolia: {
-    chainId: 11155111,
-    name: 'Sepolia Testnet',
-    rpcUrl: SEPOLIA_RPC_URL,
-    blockExplorer: 'https://sepolia.etherscan.io',
-    nativeCurrency: {
-      name: 'Sepolia ETH',
-      symbol: 'ETH',
-      decimals: 18
-    }
-  },
   baseSepolia: {
     chainId: 84532,
     name: 'Base Sepolia',
-    rpcUrl: 'https://sepolia.base.org',
+    rpcUrl: BASE_SEPOLIA_RPC_URL,
     blockExplorer: 'https://sepolia.basescan.org',
     nativeCurrency: {
       name: 'ETH',
@@ -65,7 +54,7 @@ export const X402_CONFIG = {
     custom: '$0.002',
     analytics: '$0.0001'
   },
-  paymentAddress: process.env.X402_PAYMENT_ADDRESS || '0x0000000000000000000000000000000000000000'
+  paymentAddress: process.env.NEXT_PUBLIC_X402_PAYMENT_ADDRESS || '0x0000000000000000000000000000000000000000'
 } as const;
 
 // Helper function to format addresses
