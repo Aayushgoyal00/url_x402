@@ -67,21 +67,21 @@ export function useX402Payment() {
     console.log('Chain:', baseSepolia);
     
     try {
-      // Create wallet client for signing
+      // Create wallet client for signing with x402
       const walletClient = createWalletClient({
-        chain: baseSepolia, // x402 payments on Base Sepolia
+        chain: baseSepolia,
         transport: custom(window.ethereum as never),
         account: address as `0x${string}`,
       });
       
       console.log('Wallet client created successfully');
 
-      // Create axios instance with payment interceptor
+      // Create axios instance with x402 payment interceptor
       const api = withPaymentInterceptor(
         axios.create({
           baseURL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
         }),
-        walletClient as unknown as Parameters<typeof withPaymentInterceptor>[1]
+        walletClient as any // x402-axios expects WalletClient
       );
 
       toast.info('Processing payment... Please check your wallet', { duration: 3000 });

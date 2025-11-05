@@ -20,8 +20,19 @@ export async function GET(
       );
     }
 
-    // Note: Payment has been verified by x402 middleware before reaching here
-    const payerAddress = request.headers.get('x-payer-address');
+    // Payment verified by x402 middleware before reaching here
+    const paymentResponseHeader = request.headers.get('x-payment-response');
+    
+    let payerAddress = 'anonymous';
+    
+    if (paymentResponseHeader) {
+      try {
+        const paymentResponse = JSON.parse(Buffer.from(paymentResponseHeader, 'base64').toString());
+        payerAddress = paymentResponse.payer || payerAddress;
+      } catch (error) {
+        console.error('Failed to parse payment response:', error);
+      }
+    }
 
     // Connect to smart contract on Base Sepolia
     const provider = new ethers.JsonRpcProvider(
@@ -103,6 +114,20 @@ export async function GET(
 // POST endpoint - getUserUrls not available in minimalist contract
 export async function POST(request: NextRequest) {
   try {
+    // Payment verified by x402 middleware
+    const paymentResponseHeader = request.headers.get('x-payment-response');
+    
+    let payerAddress = 'anonymous';
+    
+    if (paymentResponseHeader) {
+      try {
+        const paymentResponse = JSON.parse(Buffer.from(paymentResponseHeader, 'base64').toString());
+        payerAddress = paymentResponse.payer || payerAddress;
+      } catch (error) {
+        console.error('Failed to parse payment response:', error);
+      }
+    }
+
     const body = await request.json();
     const { userAddress } = body;
 
@@ -112,9 +137,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    // Note: Payment has been verified by x402 middleware
-    const payerAddress = request.headers.get('x-payer-address');
 
     // getUserUrls functionality removed in minimalist contract
     return NextResponse.json({

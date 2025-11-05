@@ -1,6 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Externalize server-side packages to reduce bundle size
+  serverExternalPackages: [
+    'pino-pretty',
+    'lokijs',
+    'encoding',
+    '@noble/curves',
+    '@noble/hashes',
+  ],
+  
   // Fix webpack bundling conflicts for Netlify
   webpack: (config, { isServer }) => {
     // Externalize problematic packages to avoid bundling issues

@@ -1,11 +1,8 @@
 import { paymentMiddleware } from 'x402-next';
 
-// Log the payment address for debugging (remove in production)
-console.log('NEXT_PUBLIC_X402_PAYMENT_ADDRESS:', process.env.NEXT_PUBLIC_X402_PAYMENT_ADDRESS || 'NOT SET');
-
 // Configure the x402 payment middleware
 export const middleware = paymentMiddleware(
-  (process.env.NEXT_PUBLIC_X402_PAYMENT_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`, // Your receiving wallet address
+  (process.env.NEXT_PUBLIC_X402_PAYMENT_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`,
   {
     // Protected routes with their pricing
     '/api/shorten': {
@@ -13,17 +10,8 @@ export const middleware = paymentMiddleware(
       network: 'base-sepolia', // Using Base Sepolia testnet
       config: {
         description: 'Create a shortened URL',
-        maxTimeoutSeconds: 120, // Increased timeout
+        maxTimeoutSeconds: 120,
         mimeType: 'application/json',
-        outputSchema: {
-          type: 'object',
-          properties: {
-            shortUrl: { type: 'string' },
-            shortCode: { type: 'string' },
-            originalUrl: { type: 'string' },
-            message: { type: 'string' }
-          }
-        }
       }
     },
     '/api/analytics/[shortCode]': {
@@ -37,7 +25,7 @@ export const middleware = paymentMiddleware(
     }
   },
   {
-    url: "https://x402.org/facilitator", // x402 facilitator for Base Sepolia testnet
+    url: "https://x402.org/facilitator",
   }
 );
 
@@ -48,3 +36,4 @@ export const config = {
     '/api/analytics/:path*',
   ]
 };
+

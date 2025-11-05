@@ -16,6 +16,21 @@ function generateShortCode(): string {
 
 export async function POST(request: NextRequest) {
   try {
+    // Payment verified by x402 middleware before reaching here
+    // Extract payer address from x402 headers
+    const paymentResponseHeader = request.headers.get('x-payment-response');
+    
+    let payerAddress = '0x0000000000000000000000000000000000000000';
+    
+    if (paymentResponseHeader) {
+      try {
+        const paymentResponse = JSON.parse(Buffer.from(paymentResponseHeader, 'base64').toString());
+        payerAddress = paymentResponse.payer || payerAddress;
+      } catch (error) {
+        console.error('Failed to parse payment response:', error);
+      }
+    }
+
     // Parse request body
     const body = await request.json();
     const { url } = body;
@@ -36,48 +51,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    // Get payment information from headers (x402 adds this after payment)
-    const paymentHeader = request.headers.get('x-payment');
-    const paymentResponseHeader = request.headers.get('x-payment-response');
-    
-    console.log('Payment headers:', {
-      hasPayment: !!paymentHeader,
-      hasPaymentResponse: !!paymentResponseHeader
-    });
-
-    // Extract payer address from x-payment-response header
-    let payerAddress = '0x0000000000000000000000000000000000000000';
-    
-    if (paymentResponseHeader) {
-      try {
-        const paymentResponse = JSON.parse(atob(paymentResponseHeader));
-        console.log('Payment response:', paymentResponse);
-        payerAddress = paymentResponse.payer || '0x0000000000000000000000000000000000000000';
-        console.log('Extracted payer address:', payerAddress);
-      } catch (error) {
-        console.error('Failed to parse payment response:', error);
-      }
-    }
-
-    // Validate that payment was processed
-    if (!payerAddress || payerAddress === '0x0000000000000000000000000000000000000000') {
-      console.error('No valid payer address - payment may not have been processed');
-      return NextResponse.json(
-        { 
-          error: 'Payment verification failed',
-          details: 'No payer address found. Please ensure payment was completed.',
-          debug: {
-            hasPaymentHeader: !!paymentHeader,
-            hasPaymentResponse: !!paymentResponseHeader
-          }
-        },
-        { status: 402 }
-      );
-    }
-
-    // Note: In production, x402 middleware validates payment before request reaches here
-    // If we're here, payment has been verified by x402
 
     // Connect to smart contract on Base Sepolia
     const provider = new ethers.JsonRpcProvider(
@@ -167,3 +140,4 @@ export async function GET() {
     }
   });
 }
+
