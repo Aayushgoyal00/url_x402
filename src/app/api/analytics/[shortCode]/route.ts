@@ -49,8 +49,10 @@ export async function GET(
       const createdDate = new Date(Number(createdAt) * 1000);
       const daysSinceCreation = Math.floor((Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
 
-      // Build the short URL
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      // Build the short URL - use request headers to get the actual domain
+      const host = request.headers.get('host') || 'localhost:3000';
+      const protocol = request.headers.get('x-forwarded-proto') || 'http';
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`;
       const shortUrl = `${baseUrl}/s/${shortCode}`;
 
       return NextResponse.json({

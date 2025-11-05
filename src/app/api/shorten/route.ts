@@ -124,9 +124,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Construct the short URL
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    // Construct the short URL - use request headers to get the actual domain
+    const host = request.headers.get('host') || 'localhost:3000';
+    const protocol = request.headers.get('x-forwarded-proto') || 'http';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || `${protocol}://${host}`;
     const shortUrl = `${baseUrl}/s/${shortCode}`;
+    
+    console.log('Generated short URL:', shortUrl);
 
     // Return success response
     return NextResponse.json({
