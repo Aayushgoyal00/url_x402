@@ -32,9 +32,9 @@ export default function RedirectPage() {
         
         // Perform the redirect
         window.location.href = data.originalUrl;
-      } catch (err: any) {
+      } catch (err) {
         console.error('Redirect error:', err);
-        setError(err.message || 'Failed to redirect');
+        setError(err instanceof Error ? err.message : 'Failed to redirect');
       }
     };
 
